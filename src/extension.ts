@@ -19,23 +19,30 @@ const supportedLangConfig = {
     tsx: {},
 };
 
-const parserDir = path.join(__dirname, "parsers");
+const parserDir = path.join(__dirname, "../parsers");
 
 const legend = new vscode.SemanticTokensLegend(
     ["type", "namespace", "function", "variable", "number", "string",
-            "comment", "macro", "keyword", "operator", "punctuation"],
+     "comment", "macro", "keyword", "operator", "punctuation"],
     ["readonly", "defaultLibrary", "modification"]);
 
 class TokenProvider implements vscode.DocumentSemanticTokensProvider, vscode.HoverProvider {
     static parsers: { [lang: string]: Parser } = {};
-    
+    static parserInitPromise = Parser.init({
+        locateFile: () => {
+            return path.join(__dirname, "../node_modules/web-tree-sitter/tree-sitter.wasm");
+        }
+    });
+
     // onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
     
     async provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SemanticTokens> {
         const lang = document.languageId;
         if (!(lang in TokenProvider.parsers)) {
+            await TokenProvider.parserInitPromise;
             const parser = new Parser();
-            parser.setLanguage(await Parser.Language.load(path.join(parserDir, `${lang}.wasm`)));
+            const wasmPath = path.join(parserDir, `${lang}.wasm`);
+            parser.setLanguage(await Parser.Language.load(wasmPath));
             TokenProvider.parsers[lang] = parser;
         }
         const parser = TokenProvider.parsers[lang];
@@ -44,11 +51,11 @@ class TokenProvider implements vscode.DocumentSemanticTokensProvider, vscode.Hov
         const cursor = tree.walk();
     walk:
         while (true) {
-            console.log(cursor.nodeText);
-
             if (cursor.gotoFirstChild()) {
                 continue;
             }
+            
+            console.log(cursor.nodeText);
 
             while (!cursor.gotoNextSibling()) {
                 if (!cursor.gotoParent()) {
@@ -86,7 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.languages.registerDocumentSemanticTokensProvider(
             supportedLangs, engine, legend));
 
-    console.log(123);
+    console.log("supported languages: ", supportedLangs.map(x => x.language).join(", "));
 }
 
 // This method is called when your extension is deactivated

@@ -171,9 +171,9 @@
   resolved "https://registry.npmmirror.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
 
-"@types/vscode@^1.72.0":
+"@types/vscode@^1.46.0":
   version "1.72.0"
-  resolved "https://registry.npmmirror.com/@types/vscode/-/vscode-1.72.0.tgz#56447ca2eaca34f0d0797c8bb9e51de132f6bb0a"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.72.0.tgz#56447ca2eaca34f0d0797c8bb9e51de132f6bb0a"
   integrity sha512-WvHluhUo+lQvE3I4wUagRpnkHuysB4qSyOQUyIAS9n9PYMJjepzTUD8Jyks0YeXoPD0UGctjqp2u84/b3v6Ydw==
 
 "@typescript-eslint/eslint-plugin@^5.38.1":
@@ -1572,7 +1572,7 @@ ms@2.1.3:
   resolved "https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-nan@^2.12.1, nan@^2.14.0, nan@^2.14.1, nan@^2.15.0:
+nan@^2.12.1, nan@^2.14.0, nan@^2.14.1, nan@^2.15.0, nan@^2.16.0:
   version "2.17.0"
   resolved "https://registry.npmmirror.com/nan/-/nan-2.17.0.tgz#c0150a2368a182f033e9aa5195ec76ea41a199cb"
   integrity sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==
@@ -2195,12 +2195,11 @@ tree-sitter-lua@^2.1.3:
   dependencies:
     nan "^2.15.0"
 
-tree-sitter-ocaml@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.npmmirror.com/tree-sitter-ocaml/-/tree-sitter-ocaml-0.19.0.tgz#41ecae22dd62ca470d547482c6ce8cb5343d7a5e"
-  integrity sha512-ZEeB+qVz6kWBDL5oFw4dKx4S0i17K+P98zrZeMDPzc+z5WuB430XI476bSED3EwqQ7WUyJN/Vw47KASnvcHcsQ==
+"tree-sitter-ocaml@git+https://github.com/shapled/tree-sitter-ocaml.git":
+  version "0.20.0"
+  resolved "git+https://github.com/shapled/tree-sitter-ocaml.git#93580095e2b51df489c1b48669f226df0db6dc87"
   dependencies:
-    nan "^2.14.1"
+    nan "^2.16.0"
 
 tree-sitter-php@^0.19.0:
   version "0.19.0"
