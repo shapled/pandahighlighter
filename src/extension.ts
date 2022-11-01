@@ -1,18 +1,63 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
 import * as Parser from 'web-tree-sitter';
 
-const langConfig = {
+const supportedLangConfig = {
+    bash: {},
     c: {},
+    cpp: {},
+    go: {},
     javascript: {},
+    lua: {},
+    ocaml: {},
+    ocamlInterface: {},
+    php: {},
+    python: {},
+    ruby: {},
+    rust: {},
+    typescript: {},
+    tsx: {},
 };
 
+const parserDir = path.join(__dirname, "parsers");
+
+const legend = new vscode.SemanticTokensLegend(
+    ["type", "namespace", "function", "variable", "number", "string",
+            "comment", "macro", "keyword", "operator", "punctuation"],
+    ["readonly", "defaultLibrary", "modification"]);
+
 class TokenProvider implements vscode.DocumentSemanticTokensProvider, vscode.HoverProvider {
-    parser: { [lang: string]: Parser } = {};
+    static parsers: { [lang: string]: Parser } = {};
     
     // onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
     
-    provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.SemanticTokens> {
-        throw new Error('Method not implemented.');
+    async provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SemanticTokens> {
+        const lang = document.languageId;
+        if (!(lang in TokenProvider.parsers)) {
+            const parser = new Parser();
+            parser.setLanguage(await Parser.Language.load(path.join(parserDir, `${lang}.wasm`)));
+            TokenProvider.parsers[lang] = parser;
+        }
+        const parser = TokenProvider.parsers[lang];
+        const tree = parser.parse(document.getText());
+        const builder = new vscode.SemanticTokensBuilder(legend);
+        const cursor = tree.walk();
+    walk:
+        while (true) {
+            console.log(cursor.nodeText);
+
+            if (cursor.gotoFirstChild()) {
+                continue;
+            }
+
+            while (!cursor.gotoNextSibling()) {
+                if (!cursor.gotoParent()) {
+                    break walk;
+                }
+            }
+        }
+
+        return builder.build();
     }
     
     // provideDocumentSemanticTokensEdits?(document: vscode.TextDocument, previousResultId: string, token: vscode.CancellationToken): vscode.ProviderResult<vscode.SemanticTokens | vscode.SemanticTokensEdits> {
@@ -27,21 +72,21 @@ class TokenProvider implements vscode.DocumentSemanticTokensProvider, vscode.Hov
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    const enabledLangs: string[] | undefined = vscode.workspace.getConfiguration("panda").get("languages");
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "pandahighlighter" is now active!');
-
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('pandahighlighter.helloWorld', () => {
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from pandahighlighter!');
+    const supportedLangs: {language: string}[] = [];
+    Object.keys(supportedLangConfig).forEach(lang => {
+        if (!enabledLangs || enabledLangs.includes(lang)) {
+            supportedLangs.push({language: lang});
+        }
     });
 
-    context.subscriptions.push(disposable);
+    const engine = new TokenProvider();
+    context.subscriptions.push(
+        vscode.languages.registerDocumentSemanticTokensProvider(
+            supportedLangs, engine, legend));
+
+    console.log(123);
 }
 
 // This method is called when your extension is deactivated
