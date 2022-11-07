@@ -35,6 +35,25 @@ class TokenProvider implements vscode.DocumentSemanticTokensProvider, vscode.Hov
     });
 
     // onDidChangeSemanticTokens?: vscode.Event<void> | undefined;
+
+    *walk(tree: Parser.Tree): Generator<Parser.TreeCursor> {
+        const cursor = tree.walk();
+        while (true) {
+            if (cursor.nodeType === "string") {
+                yield cursor;
+            } else if (cursor.gotoFirstChild()) {
+                continue;
+            } else {
+                yield cursor;
+            }
+
+            while (!cursor.gotoNextSibling()) {
+                if (!cursor.gotoParent()) {
+                    return;
+                }
+            }
+        }
+    }
     
     async provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SemanticTokens> {
         const lang = document.languageId;
@@ -48,20 +67,9 @@ class TokenProvider implements vscode.DocumentSemanticTokensProvider, vscode.Hov
         const parser = TokenProvider.parsers[lang];
         const tree = parser.parse(document.getText());
         const builder = new vscode.SemanticTokensBuilder(legend);
-        const cursor = tree.walk();
-    walk:
-        while (true) {
-            if (cursor.gotoFirstChild()) {
-                continue;
-            }
-            
-            console.log(cursor.nodeText);
-
-            while (!cursor.gotoNextSibling()) {
-                if (!cursor.gotoParent()) {
-                    break walk;
-                }
-            }
+        
+        for(const cursor of this.walk(tree)) {
+            console.log(cursor.nodeType, ":", cursor.nodeText);
         }
 
         return builder.build();
