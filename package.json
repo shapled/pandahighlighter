@@ -1,104 +1,41 @@
 {
   "name": "pandahighlighter",
   "displayName": "pandahighlighter",
-  "description": "Pandahighlighter is a syntax highlight theme for e-ink.",
+  "description": "Pandahighlighter is a theme for e-ink.",
+  "homepage": "https://github.com/shapled/pandahighlighter",
+  "icon": "assets/logo.jpg",
+  "publisher": "shapled",
+  "license": "MIT",
   "version": "0.1.0",
-  "engines": {
-    "vscode": "^1.46.0"
-  },
   "author": {
     "name": "shapled",
     "email": "shapled@shapled.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shapled/pandahighlighter"
+  },
+  "bugs": {
+    "url": "https://github.com/shapled/pandahighlighter/issues"
+  },
+  "engines": {
+    "vscode": "^1.73.0"
+  },
   "categories": [
-    "Programming Languages",
-    "Themes",
-    "Other"
+    "Themes"
   ],
-  "activationEvents": [
-    "onLanguage:c",
-    "onLanguage:cpp",
-    "onLanguage:python",
-    "onLanguage:typescript",
-    "onLanguage:typescriptreact",
-    "onLanguage:javascript",
-    "onLanguage:go",
-    "onLanguage:rust",
-    "onLanguage:php",
-    "onLanguage:ruby",
-    "onLanguage:shellscript",
-    "onLanguage:ocaml",
-    "onLanguage:lua"
-  ],
-  "main": "./dist/extension.js",
   "contributes": {
-    "configuration": {
-      "title": "PandaHighlighter Configuration",
-      "properties": {
-        "syntax.highlightLanguages": {
-          "description": "Enabled languages",
-          "type": "array",
-          "default": [
-            "bash",
-            "c",
-            "cpp",
-            "lua",
-            "ocaml",
-            "python",
-            "typescript",
-            "typescriptreact",
-            "javascript",
-            "go",
-            "rust",
-            "php",
-            "ruby"
-          ]
-        }
+    "themes": [
+      {
+        "label": "PandaHighlighter",
+        "uiTheme": "vs-dark",
+        "path": "./themes/pandahighlighter-dark.json"
+      },
+      {
+        "label": "PandaHighlighter",
+        "uiTheme": "vs",
+        "path": "./themes/pandahighlighter-light.json"
       }
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "yarn run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
-    "postinstall": "node build.js"
-  },
-  "devDependencies": {
-    "@types/glob": "^8.0.0",
-    "@types/mocha": "^10.0.0",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.46.0",
-    "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
-    "@vscode/test-electron": "^2.1.5",
-    "eslint": "^8.24.0",
-    "glob": "^8.0.3",
-    "mocha": "^10.0.0",
-    "tree-sitter-bash": "^0.19.0",
-    "tree-sitter-c": "^0.20.2",
-    "tree-sitter-cli": "^0.20.7",
-    "tree-sitter-cpp": "^0.20.0",
-    "tree-sitter-go": "^0.19.1",
-    "tree-sitter-javascript": "^0.19.0",
-    "tree-sitter-lua": "^2.1.3",
-    "tree-sitter-ocaml": "git+https://github.com/shapled/tree-sitter-ocaml.git",
-    "tree-sitter-php": "^0.19.0",
-    "tree-sitter-python": "^0.20.1",
-    "tree-sitter-ruby": "^0.19.0",
-    "tree-sitter-rust": "^0.20.1",
-    "tree-sitter-typescript": "^0.20.1",
-    "ts-loader": "^9.4.1",
-    "typescript": "^4.8.4",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
-  },
-  "dependencies": {
-    "web-tree-sitter": "^0.20.7"
+    ]
   }
 }
