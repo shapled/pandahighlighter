@@ -24,8 +24,8 @@
   "categories": [
     "Themes"
   ],
-	"keywords": [
-		"e-ink",
+  "keywords": [
+    "e-ink",
     "dark",
     "light",
     "black-and-white"
@@ -43,5 +43,12 @@
         "path": "./themes/pandahighlighter-dark.json"
       }
     ]
+  },
+  "scripts": {
+    "build": "vsce package",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "vsce": "^2.14.0"
   }
 }
