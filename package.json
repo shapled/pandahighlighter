@@ -24,17 +24,23 @@
   "categories": [
     "Themes"
   ],
+	"keywords": [
+		"e-ink",
+    "dark",
+    "light",
+    "black-and-white"
+  ],
   "contributes": {
     "themes": [
       {
-        "label": "PandaHighlighter",
-        "uiTheme": "vs-dark",
-        "path": "./themes/pandahighlighter-dark.json"
-      },
-      {
-        "label": "PandaHighlighter",
+        "label": "PandaHighlighter Light",
         "uiTheme": "vs",
         "path": "./themes/pandahighlighter-light.json"
+      },
+      {
+        "label": "PandaHighlighter Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/pandahighlighter-dark.json"
       }
     ]
   }

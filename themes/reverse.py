@@ -11,6 +11,7 @@ usage = r"""usage:
     
     python reverse.py <input.json> <output.json>"""
 
+
 def do_reverse(root):
     if isinstance(root, dict):
         return {k: do_reverse(v) for k, v in root.items()}
@@ -19,6 +20,10 @@ def do_reverse(root):
     if isinstance(root, str):
         if pattern.match(root):
             return "".join(["#"] + [hex(15 - int(v, 16))[2:].upper() for v in root[1:]])
+        if root == "light":
+            return "dark"
+        if root == "dark":
+            return "light"
     return root
 
 
